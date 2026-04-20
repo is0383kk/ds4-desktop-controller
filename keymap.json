@@ -1,0 +1,18 @@
+{
+  "buttons": {
+    "cross": { "type": "mouseClick", "button": "left" },
+    "circle": { "type": "mouseClick", "button": "right" },
+    "triangle": { "type": "key", "key": "Enter" },
+    "square": { "type": "key", "key": "Backspace" },
+    "l1": { "type": "hotkey", "keys": ["Alt", "Tab"] },
+    "options": { "type": "key", "key": "Meta" },
+    "dpadUp": { "type": "key", "key": "Up" },
+    "dpadDown": { "type": "key", "key": "Down" },
+    "dpadLeft": { "type": "key", "key": "Left" },
+    "dpadRight": { "type": "key", "key": "Right" }
+  },
+  "sticks": {
+    "left": { "type": "mouseMove", "speed": 20 },
+    "right": { "type": "scroll", "speed": 20 }
+  }
+}
