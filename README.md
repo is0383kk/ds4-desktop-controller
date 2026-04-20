@@ -1,127 +1,137 @@
+<table>
+	<thead>
+    	<tr>
+      		<th style="text-align:center">English</th>
+          <th style="text-align:center"><a href="./README_cn.md">Chinese</a></th>
+      		<th style="text-align:center"><a href="./README_ja.md">日本語</a></th>
+    	</tr>
+  	</thead>
+</table>
+
 # ps4-controller
 
-PS4 DualShock 4 コントローラーを USB HID 経由で接続し、マウス・キーボード操作に変換するツール。
+A tool that connects a PS4 DualShock 4 controller via USB HID and maps its input to mouse and keyboard actions.
 
-## 必要環境
+## Requirements
 
 - Windows 11
-- Node.js v18 以上
-- PS4 DualShock 4（USB 直接接続）
+- Node.js v18 or later
+- PS4 DualShock 4 (direct USB connection)
 
-> DS4Windows などの仮想デバイスドライバーが有効な場合、USB HID として認識されないことがある。その場合は無効化してから接続すること。
+> If a virtual device driver such as DS4Windows is active, the controller may not be recognized as a USB HID device. Disable it before connecting.
 
-## インストール
+## Installation
 
 ```powershell
-git clone <リポジトリURL>
+git clone <repository-url>
 cd ps4-controller
 npm install
 npm link
 ```
 
-`npm link` により、どのディレクトリからでも `ps4-controller` コマンドで起動できる。
+After `npm link`, you can launch the tool with the `ps4-controller` command from any directory.
 
-## 使い方
+## Usage
 
 ```powershell
 ps4-controller
 ```
 
-コントローラーが認識されると入力待機状態になる。終了は `Ctrl+C`。
+Once the controller is recognized, the tool enters input-listening mode. Press `Ctrl+C` to exit.
 
-プロジェクトディレクトリから直接起動する場合:
+To launch directly from the project directory:
 
 ```powershell
 npm start
 ```
 
-## デフォルトのボタン割り当て
+## Default Button Mappings
 
-### ボタン
+### Buttons
 
-| ボタン | 操作 |
+| Button | Action |
 |---|---|
-| × | 左クリック |
-| ○ | 右クリック |
+| × | Left click |
+| ○ | Right click |
 | △ | Enter |
 | □ | Backspace |
-| 十字キー上下左右 | 矢印キー |
-| L1 | Alt + Tab（ウィンドウ切り替え） |
-| Options | Win キー（スタートメニュー） |
+| D-pad (up/down/left/right) | Arrow keys |
+| L1 | Alt + Tab (window switch) |
+| Options | Win key (Start menu) |
 
-### スティック
+### Sticks
 
-| スティック | 操作 |
+| Stick | Action |
 |---|---|
-| 左スティック X/Y | マウスカーソル移動 |
-| 右スティック Y 軸 | 縦スクロール |
-| 右スティック X 軸 | 横スクロール |
+| Left stick X/Y | Mouse cursor movement |
+| Right stick Y axis | Vertical scroll |
+| Right stick X axis | Horizontal scroll |
 
-## キーマップのカスタマイズ
+## Keymap Customization
 
-ルートディレクトリの `keymap.json` を編集することで割り当てを変更できる。アプリを再起動すると反映される。
+Edit `keymap.json` in the root directory to change the mappings. Restart the app to apply changes.
 
-### アクション種別
+### Action Types
 
 ```jsonc
-// マウスクリック
+// Mouse click
 { "type": "mouseClick", "button": "left" | "right" }
 
-// キー単押し
+// Single key press
 { "type": "key", "key": "Enter" | "Backspace" | "Up" | "Down" | "Left" | "Right" | "Meta" | ... }
 
-// ホットキー（複数キー同時押し）
+// Hotkey (multiple keys simultaneously)
 { "type": "hotkey", "keys": ["Alt", "Tab"] }
 ```
 
-### スティック設定
+### Stick Settings
 
 ```jsonc
-// マウス移動（speed: ピクセル/フレーム の最大値）
+// Mouse movement (speed: max pixels per frame)
 { "type": "mouseMove", "speed": 20 }
 
-// スクロール（speed: スクロール量の係数）
+// Scroll (speed: scroll amount multiplier)
 { "type": "scroll", "speed": 5 }
 ```
 
-## アーキテクチャ
+## Architecture
 
 ```
-HID デバイス
-    ↓ data イベント (Buffer)
+HID Device
+    ↓ data event (Buffer)
 parseControllerData()   ← src/controller.ts
     ↓ ControllerState
-executeAction()         ← src/desktop.ts  (keymap.ts のキーマップを参照)
+executeAction()         ← src/desktop.ts  (references keymap from keymap.ts)
     ↓
-@nut-tree-fork/nut-js (マウス・キーボード操作)
+@nut-tree-fork/nut-js (mouse & keyboard operations)
 ```
 
-入力は 16ms（約 60fps）のポーリングで処理され、ボタンはエッジ検出（前フレームとの差分）により押下タイミングを検出する。
+Input is processed with 16ms polling (~60fps). Button presses are detected via edge detection (diff from previous frame).
 
-## ファイル構成
+## File Structure
 
 ```
 ps4-controller/
 ├── bin/
-│   └── ps4-controller.js   # npm link 用エントリポイント
+│   └── ps4-controller.js   # Entry point for npm link
 ├── src/
-│   ├── index.ts            # エントリポイント。HID 接続・ポーリングループ
-│   ├── controller.ts       # Buffer → ControllerState のパース
-│   ├── desktop.ts          # ControllerState → マウス・キーボード操作
-│   └── keymap.ts           # keymap.json の型定義・ロード・バリデーション
-├── keymap.json             # ボタン/スティック → アクションの設定
+│   ├── index.ts            # Entry point. HID connection & polling loop
+│   ├── controller.ts       # Buffer → ControllerState parser
+│   ├── desktop.ts          # ControllerState → mouse & keyboard actions
+│   └── keymap.ts           # keymap.json type definitions, loading & validation
+├── keymap.json             # Button/stick → action configuration
 └── tsconfig.json
 ```
 
-## 開発用コマンド
+## Development Commands
 
 ```powershell
-# ウォッチモードで起動（ファイル変更時に自動再起動）
+# Launch in watch mode (auto-restart on file changes)
 npm run dev
 
-# TypeScript のビルド
+# Build TypeScript
 npm run build
 
-# 型チェックのみ
+# Type check only
 npx tsc --noEmit
 ```
