@@ -8,7 +8,7 @@
   	</thead>
 </table>
 
-# ps4-controller
+# ds4-desktop-controller
 
 A tool that connects a PS4 DualShock 4 controller via USB HID and maps its input to mouse and keyboard actions.
 

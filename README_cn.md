@@ -8,7 +8,7 @@
   	</thead>
 </table>
 
-# ps4-controller
+# ds4-desktop-controller
 
 通过 USB HID 连接 PS4 DualShock 4 手柄，并将其输入转换为鼠标和键盘操作的工具。
 

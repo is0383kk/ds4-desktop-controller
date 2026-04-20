@@ -8,7 +8,7 @@
   	</thead>
 </table>
 
-# ps4-controller
+# ds4-desktop-controller
 
 PS4 DualShock 4 コントローラーを USB HID 経由で接続し、マウス・キーボード操作に変換するツール。
 
