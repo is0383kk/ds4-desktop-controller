@@ -23,7 +23,7 @@ A tool that connects a PS4 DualShock 4 controller via USB HID and maps its input
 ## Installation
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/is0383kk/ds4-desktop-controller.git
 cd ps4-controller
 npm install
 npm link

@@ -23,7 +23,7 @@
 ## 安装
 
 ```powershell
-git clone <仓库URL>
+git clone https://github.com/is0383kk/ds4-desktop-controller.git
 cd ps4-controller
 npm install
 npm link
